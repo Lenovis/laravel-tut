@@ -11,14 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+use App\Mail\NewUserWelcomeMail;
+
+Auth::routes();
+
+Route::get('/email', function () {
+    return new NewUserWelcomeMail();
 });
 
-Auth::routes();
+Route::post('follow/{user}', 'FollowsController@store');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'PostsController@index');
+Route::get('/p/create', 'PostsController@create');
+Route::get('/p/{post}', 'PostsController@show');
+Route::post('/p', 'PostsController@store');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/profile/{user}/edit', 'ProfilesController@edit')->name('profile.edit');
+Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
+Route::patch('/profile/{user}', 'ProfilesController@update')->name('profile.update');
